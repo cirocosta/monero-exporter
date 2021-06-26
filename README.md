@@ -1,6 +1,6 @@
 # monero-exporter
 
-Prometheus exporter for [monero](https://getmonero.org).
+[Prometheus](https://prometheus.io) exporter for [monero](https://getmonero.org).
 
 
 ## Installation
