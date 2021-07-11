@@ -75,7 +75,7 @@ func Register(client *daemon.Client, opts ...Option) error {
 	c := &Collector{
 		client:        client,
 		log:           zapr.NewLogger(defaultLogger.Named("collector")),
-		countryMapper: func(_ net.IP) (string, error) { return "lol", nil },
+		countryMapper: func(_ net.IP) (string, error) { return "unknown", nil },
 	}
 
 	for _, opt := range opts {
