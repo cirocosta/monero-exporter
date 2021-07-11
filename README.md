@@ -20,15 +20,24 @@ From releases:
 
 ```console
 $ monero-exporter --help
+
+Prometheus exporter for monero metrics
+
 Usage:
-  monero-exporter [OPTIONS]
+  monero-exporter [flags]
+  monero-exporter [command]
 
-Application Options:
-      --monerod-address= address of monerod rpc (restricted if possible) (default: http://localhost:18081)
-      --geoip-file=      filepath of geoip database
+Available Commands:
+  completion  generate the autocompletion script for the specified shell
+  help        Help about any command
+  version     print the version of this CLI
 
-Help Options:
-  -h, --help             Show this help message
+Flags:
+      --address string          address of the monero node to collect metrics from
+      --geoip-filepath string   filepath of a geoip database file for ip to country resolution
+  -h, --help                    help for monero-exporter
+
+Use "monero-exporter [command] --help" for more information about a command.
 ```
 
 ## Metrics

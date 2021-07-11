@@ -10,12 +10,13 @@ import (
 	"time"
 
 	"github.com/bmizerany/perks/quantile"
-	"github.com/cirocosta/go-monero/pkg/rpc"
 	"github.com/go-logr/logr"
 	"github.com/go-logr/zapr"
 	"github.com/prometheus/client_golang/prometheus"
 	"go.uber.org/zap"
 	"golang.org/x/sync/errgroup"
+
+	"github.com/cirocosta/go-monero/pkg/rpc/daemon"
 )
 
 // CountryMapper defines the signature of a function that given an IP,
@@ -32,7 +33,7 @@ type Collector struct {
 	// client is a Go client that communicated with a `monero` daemon via
 	// plain HTTP(S) RPC.
 	//
-	client *rpc.Client
+	client *daemon.Client
 
 	// countryMapper is a function that knows how to translate IPs to
 	// country codes.
@@ -65,7 +66,7 @@ func WithCountryMapper(v CountryMapper) func(c *Collector) {
 // Register registers this collector with the global prometheus collectors
 // registry making it available for an exporter to collect our metrics.
 //
-func Register(client *rpc.Client, opts ...Option) error {
+func Register(client *daemon.Client, opts ...Option) error {
 	defaultLogger, err := zap.NewDevelopment()
 	if err != nil {
 		return fmt.Errorf("zap new development: %w", err)
@@ -265,9 +266,8 @@ func (c *Collector) CollectLastBlockStats(ctx context.Context, ch chan<- prometh
 	}
 
 	currentHeight := lastBlockHeaderResp.BlockHeader.Height
-
-	block, err := c.client.GetBlock(ctx, rpc.GetBlockRequestParameters{
-		Height: &currentHeight,
+	block, err := c.client.GetBlock(ctx, daemon.GetBlockRequestParameters{
+		Height: currentHeight,
 	})
 	if err != nil {
 		return fmt.Errorf("get block '%d': %w", currentHeight, err)
