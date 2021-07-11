@@ -12,42 +12,55 @@ import (
 	"go.uber.org/zap"
 )
 
+const (
+	defaultBindAddress   = ":9000"
+	defaultTelemetryPath = "/metrics"
+)
+
 // Exporter is responsible for bringing up a web server that collects metrics
 // that have been globally registered via prometheus collectors (e.g., see
 // `pkg/collector`).
 //
 type Exporter struct {
-	// ListenAddress is the full address used by prometheus
-	// to listen for scraping requests.
-	//
-	// Examples:
-	// - :8080
-	// - 127.0.0.2:1313
-	//
-	listenAddress string
-
-	// TelemetryPath configures the path under which
-	// the prometheus metrics are reported.
-	//
-	// For instance:
-	// - /metrics
-	// - /telemetry
-	//
+	bindAddress   string
 	telemetryPath string
 
-	// listener is the TCP listener used by the webserver. `nil` if no
-	// server is running.
-	//
 	listener net.Listener
-
-	log logr.Logger
+	log      logr.Logger
 }
 
-// Option.
+// WithTelemetryPath overrides the default path under which the prometheus
+// metrics are reported.
+//
+// For instance:
+//   - /
+//   - /metrics
+//   - /telemetry
+//
+func WithTelemetryPath(v string) Option {
+	return func(e *Exporter) {
+		e.telemetryPath = v
+	}
+}
+
+// WithBindAddress overrides the default address at which the prometheus
+// metrics HTTP server would bind to.
+//
+// Examples:
+//   - :8080
+//   - 127.0.0.2:1313
+//
+func WithBindAddress(v string) Option {
+	return func(e *Exporter) {
+		e.bindAddress = v
+	}
+}
+
+// Option allows overriding the exporter's defaults
 //
 type Option func(e *Exporter)
 
-// New.
+// New instantiates a new exporter with defaults, unless options are passed.
 //
 func New(opts ...Option) (*Exporter, error) {
 	defaultLogger, err := zap.NewDevelopment()
@@ -56,8 +69,8 @@ func New(opts ...Option) (*Exporter, error) {
 	}
 
 	e := &Exporter{
-		listenAddress: ":9000",
-		telemetryPath: "/metrics",
+		bindAddress:   defaultBindAddress,
+		telemetryPath: defaultTelemetryPath,
 		log:           zapr.NewLogger(defaultLogger.Named("exporter")),
 	}
 
@@ -76,9 +89,9 @@ func New(opts ...Option) (*Exporter, error) {
 func (e *Exporter) Run(ctx context.Context) error {
 	var err error
 
-	e.listener, err = net.Listen("tcp", e.listenAddress)
+	e.listener, err = net.Listen("tcp", e.bindAddress)
 	if err != nil {
-		return fmt.Errorf("listen on '%s': %w", e.listenAddress, err)
+		return fmt.Errorf("listen on '%s': %w", e.bindAddress, err)
 	}
 
 	doneChan := make(chan error, 1)
@@ -87,7 +100,7 @@ func (e *Exporter) Run(ctx context.Context) error {
 		defer close(doneChan)
 
 		e.log.WithValues(
-			"addr", e.listenAddress,
+			"addr", e.bindAddress,
 			"path", e.telemetryPath,
 		).Info("listening")
 
@@ -95,7 +108,7 @@ func (e *Exporter) Run(ctx context.Context) error {
 		if err := http.Serve(e.listener, nil); err != nil {
 			doneChan <- fmt.Errorf(
 				"failed listening on address %s: %w",
-				e.listenAddress, err,
+				e.bindAddress, err,
 			)
 		}
 	}()
