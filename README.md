@@ -9,6 +9,7 @@
 
 - [About](#about)
 - [Installation](#installation)
+- [Grafana](#grafana)
 - [Metrics](#metrics)
   - [Last block](#last-block)
   - [Transaction pool](#transaction-pool)
