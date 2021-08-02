@@ -125,6 +125,18 @@ page].
 See [INSTALL.md] for details and examples.
 
 
+## Grafana
+
+This repository includes a sample dashboard that makes use of the metrics
+exposed via this exporter (see [./grafana](./grafana)).
+
+Some screenshots from it:
+
+![](./.github/assets/grafana-transaction-pool.png)
+![](./.github/assets/grafana-last-block.png)
+![](./.github/assets/grafana-networking.png)
+![](./.github/assets/grafana-rpc.png)
+
 
 ## Metrics
 
