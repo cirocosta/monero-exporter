@@ -14,7 +14,7 @@
   - [Transaction pool](#transaction-pool)
   - [RPC](#rpc)
   - [P2P Connections](#p2p-connections)
-  - [Peers](#peers)
+  - [Peerlist](#peerlist)
   - [Net Stats](#net-stats)
   - [Info](#info)
 - [License](#license)
