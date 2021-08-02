@@ -15,8 +15,10 @@ import (
 )
 
 type command struct {
-	address       string
+	telemetryPath string
+	bindAddr      string
 	geoIPFilepath string
+	moneroAddr    string
 }
 
 func (c *command) Cmd() *cobra.Command {
@@ -26,13 +28,20 @@ func (c *command) Cmd() *cobra.Command {
 		RunE:  c.RunE,
 	}
 
-	cmd.Flags().StringVar(&c.address, "address",
-		"", "address of the monero node to collect metrics from")
-	cmd.MarkFlagRequired("address")
+	cmd.Flags().StringVar(&c.bindAddr, "bind-addr",
+		":9000", "address to bind the prometheus server to")
+
+	cmd.Flags().StringVar(&c.telemetryPath, "telemetry-path",
+		"/metrics", "endpoint at which prometheus metrics are served")
+
+	cmd.Flags().StringVar(&c.moneroAddr, "monero-addr",
+		"http://localhost:18081", "address of the monero instance to "+
+			"collect info from")
 
 	cmd.Flags().StringVar(&c.geoIPFilepath, "geoip-filepath",
-		"", "filepath of a geoip database file for ip to country resolution")
-	cmd.MarkFlagFilename("geoip-filepath")
+		"", "filepath of a geoip database file for ip to country "+
+			"resolution")
+	_ = cmd.MarkFlagFilename("geoip-filepath")
 
 	return cmd
 }
@@ -41,15 +50,9 @@ func (c *command) RunE(_ *cobra.Command, _ []string) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	prometheusExporter, err := exporter.New()
+	rpcClient, err := rpc.NewClient(c.moneroAddr)
 	if err != nil {
-		return fmt.Errorf("new exporter: %w", err)
-	}
-	defer prometheusExporter.Close()
-
-	rpcClient, err := rpc.NewClient(c.address)
-	if err != nil {
-		return fmt.Errorf("new client '%s': %w", c.address, err)
+		return fmt.Errorf("new client '%s': %w", c.moneroAddr, err)
 	}
 
 	daemonClient := daemon.NewClient(rpcClient)
@@ -66,20 +69,35 @@ func (c *command) RunE(_ *cobra.Command, _ []string) error {
 		countryMapper := func(ip net.IP) (string, error) {
 			res, err := db.Country(ip)
 			if err != nil {
-				return "", fmt.Errorf("country '%s': %w", ip, err)
+				return "", fmt.Errorf(
+					"country '%s': %w", ip, err,
+				)
 			}
 
 			return res.RegisteredCountry.IsoCode, nil
 		}
 
-		collectorOpts = append(collectorOpts, collector.WithCountryMapper(countryMapper))
+		collectorOpts = append(collectorOpts,
+			collector.WithCountryMapper(countryMapper),
+		)
 	}
 
-	if err := collector.Register(daemonClient, collectorOpts...); err != nil {
+	err = collector.Register(daemonClient, collectorOpts...)
+	if err != nil {
 		return fmt.Errorf("collector register: %w", err)
 	}
 
-	if err := prometheusExporter.Run(ctx); err != nil {
+	prometheusExporter, err := exporter.New(
+		exporter.WithBindAddress(c.bindAddr),
+		exporter.WithTelemetryPath(c.telemetryPath),
+	)
+	if err != nil {
+		return fmt.Errorf("new exporter: %w", err)
+	}
+	defer prometheusExporter.Close()
+
+	err = prometheusExporter.Run(ctx)
+	if err != nil {
 		return fmt.Errorf("prometheus exporter run: %w", err)
 	}
 
