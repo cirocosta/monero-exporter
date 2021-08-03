@@ -1,0 +1,72 @@
+# base `docker-compose` file with no explicit references to images.
+#
+# this is solely used as a template for `kbld`[1] which reads it and replaces
+# image names by absolute digest-based image references.
+#
+# - see `monero-exporter/.images.lock.yaml` for the locked set of images used.
+# - see `monero-exporter/.images.yaml` for the configuration for building the
+#   images.
+#
+# [1]: https://carvel.dev/kbld
+#
+
+version: '3'
+
+services:
+  monerod:
+    container_name: monerod
+    image: monero-exporter-monerod
+    volumes:
+      - monerod-data:/data
+    ports:
+      - 18080:18080
+      - 18089:18089
+    command:
+      - --check-updates=disabled
+      - --data-dir=/data
+      - --enforce-dns-checkpointing
+      - --limit-rate=999999
+      - --no-igd
+      - --no-zmq
+      - --out-peers=32
+      - --p2p-bind-ip=127.0.0.1
+      - --p2p-bind-port=18080
+      - --rpc-bind-ip=127.0.0.1
+      - --rpc-bind-port=18081
+      - --rpc-restricted-bind-ip=0.0.0.0
+      - --rpc-restricted-bind-port=18089
+
+  monero-exporter:
+    container_name: monero-exporter
+    image: monero-exporter
+    network_mode: service:monerod
+    command:
+      - --monero-addr=http://127.0.0.1:18081
+
+  prometheus:
+    image: monero-exporter-prometheus
+    container_name: prometheus
+    volumes:
+      - prometheus-data:/data
+      - ./prometheus/config.yaml:/etc/prometheus/config.yaml:ro
+    command:
+      - --config.file=/etc/prometheus/config.yaml
+      - --storage.tsdb.path=/data
+      - --storage.tsdb.retention.time=30d
+
+  grafana:
+    container_name: grafana
+    image: monero-exporter-grafana
+    command:
+      - -config=/etc/grafana/grafana.ini
+    volumes:
+      - ./grafana/grafana.ini:/etc/grafana/grafana.ini:ro
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+    ports:
+      - 3000:3000
+
+
+volumes:
+  prometheus-data:
+  monerod-data:

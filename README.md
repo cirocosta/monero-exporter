@@ -131,12 +131,44 @@ See [INSTALL.md] for details and examples.
 This repository includes a sample dashboard that makes use of the metrics
 exposed via this exporter (see [./grafana](./grafana)).
 
-Some screenshots from it:
+Some screenshots of it:
 
 ![](./.github/assets/grafana-transaction-pool.png)
 ![](./.github/assets/grafana-last-block.png)
 ![](./.github/assets/grafana-networking.png)
 ![](./.github/assets/grafana-rpc.png)
+
+_ps.: DO NOT publicly run the example Grafana setup without tweaking the
+configuration - it is way more permissive than you'd want a Grafana instance
+to be._
+
+
+## Example
+
+Under [./examples](./examples) you'll find a setup that makes use of
+[docker-compose] to bring up Prometheus, Grafana, and monero-exporter
+targetting an already running monero daemon (see
+[docker-compose.yaml](./examples/docker-compose.yaml)).
+
+To run it, make sure you have `docker` and `docker-compose` installed. That
+done, run:
+
+```bash
+# get inside the examples directory
+#
+cd ./examples
+
+
+# brings the services (monerod, monero-exporter, grafana, and prometheus) up
+# in the background
+#
+docker-compose up -d
+
+
+# follow the logs from those services
+#
+docker-compose logs -f
+```
 
 
 ## Metrics
@@ -299,3 +331,4 @@ See [LICENSE](./LICENSE).
 [prometheus]: https://prometheus.io
 [promql]: https://prometheus.io/docs/prometheus/latest/querying/basics/
 [releases page]: https://github.com/cirocosta/monero-exporter/releases
+[docker-compose]: https://docs.docker.com/compose/

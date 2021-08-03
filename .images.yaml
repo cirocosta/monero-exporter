@@ -1,0 +1,28 @@
+---
+apiVersion: kbld.k14s.io/v1alpha1
+kind: Config
+sources:
+  - image: monero-exporter
+    path: ./
+  - image: monero-exporter-monerod
+    path: ./examples/monerod
+  - image: monero-exporter-prometheus
+    path: ./examples/prometheus
+  - image: monero-exporter-grafana
+    path: ./examples/grafana
+destinations:
+  - image: monero-exporter
+    newImage: docker.io/utxobr/monero-exporter
+  - image: monero-exporter-monerod
+    newImage: docker.io/utxobr/monero-exporter-monerod
+  - image: monero-exporter-prometheus
+    newImage: docker.io/utxobr/monero-exporter-prometheus
+  - image: monero-exporter-grafana
+    newImage: docker.io/utxobr/monero-exporter-grafana
+
+---
+images:
+  - image: monero-exporter
+  - image: monero-exporter-monerod
+  - image: monero-exporter-prometheus
+  - image: monero-exporter-grafana

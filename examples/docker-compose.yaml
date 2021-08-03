@@ -1,0 +1,55 @@
+---
+services:
+  grafana:
+    command:
+    - -config=/etc/grafana/grafana.ini
+    container_name: grafana
+    image: index.docker.io/utxobr/monero-exporter-grafana@sha256:f9c47963d3fb573166881baf1a9f2ad331500e34b4604d430f96957ab7bb1449
+    ports:
+    - 3000:3000
+    volumes:
+    - ./grafana/grafana.ini:/etc/grafana/grafana.ini:ro
+    - ./grafana/provisioning:/etc/grafana/provisioning:ro
+    - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+  monero-exporter:
+    command:
+    - --monero-addr=http://127.0.0.1:18081
+    container_name: monero-exporter
+    image: index.docker.io/utxobr/monero-exporter@sha256:da1a13e78a9aeacac10b576824d4195a14bc1e5ba9919770d2f81cb9d32c0d4d
+    network_mode: service:monerod
+  monerod:
+    command:
+    - --check-updates=disabled
+    - --data-dir=/data
+    - --enforce-dns-checkpointing
+    - --limit-rate=999999
+    - --no-igd
+    - --no-zmq
+    - --out-peers=32
+    - --p2p-bind-ip=127.0.0.1
+    - --p2p-bind-port=18080
+    - --rpc-bind-ip=127.0.0.1
+    - --rpc-bind-port=18081
+    - --rpc-restricted-bind-ip=0.0.0.0
+    - --rpc-restricted-bind-port=18089
+    container_name: monerod
+    image: index.docker.io/utxobr/monero-exporter-monerod@sha256:2cea588aaf937025daddc1dabaa3e90d74fd07f3a2a1b84adc79d7f0f3fc9057
+    ports:
+    - 18080:18080
+    - 18089:18089
+    volumes:
+    - monerod-data:/data
+  prometheus:
+    command:
+    - --config.file=/etc/prometheus/config.yaml
+    - --storage.tsdb.path=/data
+    - --storage.tsdb.retention.time=30d
+    container_name: prometheus
+    image: index.docker.io/utxobr/monero-exporter-prometheus@sha256:f0a94da3052b0546a5a332401244d7cf63f80c74937511ac45f330c39503edac
+    volumes:
+    - prometheus-data:/data
+    - ./prometheus/config.yaml:/etc/prometheus/config.yaml:ro
+version: "3"
+volumes:
+  monerod-data: null
+  prometheus-data: null

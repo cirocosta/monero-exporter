@@ -14,9 +14,8 @@ FROM $BUILDER_IMAGE as builder
 
         RUN set -x && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 GO111MODULE=on \
                 go build -a -v \
-			-ldflags "-s -w -X main.version=$(git tag) -X main.commit=$(git rev-parse HEAD)" \
-			-tags osusergo,netgo,static_build \
 			-trimpath \
+			-tags osusergo,netgo,static_build \
 			-o monero-exporter \
 				./cmd/monero-exporter
 
@@ -24,7 +23,7 @@ FROM $BUILDER_IMAGE as builder
 FROM $RUNTIME_IMAGE
 
         WORKDIR /
-        COPY --from=builder /workspace/monero-exporter .
-        USER 65532:65532
+        COPY --chown=nonroot:nonroot --from=builder /workspace/monero-exporter .
+        USER nonroot:nonroot
 
         ENTRYPOINT ["/monero-exporter"]
