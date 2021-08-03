@@ -158,6 +158,27 @@ func (c *OverallCollector) collect() {
 		prometheus.GaugeValue,
 		float64(c.info.RPCConnectionsCount),
 	)
+
+	c.metricsC <- prometheus.MustNewConstMetric(
+		prometheus.NewDesc(
+			"monero_info_database_size_bytes",
+			"size of the monero database",
+			nil, nil,
+		),
+		prometheus.GaugeValue,
+		float64(c.info.DatabaseSize),
+	)
+
+	c.metricsC <- prometheus.MustNewConstMetric(
+		prometheus.NewDesc(
+			"monero_info_free_space_bytes",
+			"amount of free space in the partition where "+
+				"monero's database is in",
+			nil, nil,
+		),
+		prometheus.GaugeValue,
+		float64(c.info.FreeSpace),
+	)
 }
 
 func boolToFloat64(b bool) float64 {
