@@ -10,6 +10,7 @@
 - [About](#about)
 - [Installation](#installation)
 - [Grafana](#grafana)
+- [Example](#example)
 - [Metrics](#metrics)
   - [Last block](#last-block)
   - [Transaction pool](#transaction-pool)
@@ -19,7 +20,6 @@
   - [Net Stats](#net-stats)
   - [Info](#info)
 - [License](#license)
-- [Thanks](#thanks)
 - [Donate](#donate)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
