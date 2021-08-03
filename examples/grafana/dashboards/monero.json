@@ -17,7 +17,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 1,
-  "iteration": 1627934985764,
+  "iteration": 1628024752177,
   "links": [],
   "panels": [
     {
@@ -185,7 +185,7 @@
       "panels": [
         {
           "datasource": null,
-          "description": "Number of blocks alternative to the longest chain",
+          "description": "Current chain's block height vs node's current height. When syncing, let's one quickly tell how far the node is from being synchronized with the network.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -194,7 +194,6 @@
               "custom": {
                 "axisLabel": "",
                 "axisPlacement": "auto",
-                "axisSoftMin": 0,
                 "barAlignment": -1,
                 "drawStyle": "line",
                 "fillOpacity": 0,
@@ -235,7 +234,7 @@
                   }
                 ]
               },
-              "unit": "short"
+              "unit": "none"
             },
             "overrides": []
           },
@@ -245,7 +244,7 @@
             "x": 0,
             "y": 3
           },
-          "id": 64,
+          "id": 71,
           "options": {
             "legend": {
               "calcs": [],
@@ -259,13 +258,21 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "monero_info_alternative_blocks",
+              "expr": "monero_info_height",
               "interval": "",
-              "legendFormat": "alternative blocks",
+              "legendFormat": "height",
               "refId": "A"
+            },
+            {
+              "exemplar": true,
+              "expr": "monero_info_target_height",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "target",
+              "refId": "B"
             }
           ],
-          "title": "Alternative blocks",
+          "title": "Height and Target",
           "transparent": true,
           "type": "timeseries"
         },
@@ -444,6 +451,92 @@
             }
           ],
           "title": "Uptime",
+          "transparent": true,
+          "type": "timeseries"
+        },
+        {
+          "datasource": null,
+          "description": "Number of blocks alternative to the longest chain",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "axisSoftMin": 0,
+                "barAlignment": -1,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "stepBefore",
+                "lineWidth": 1,
+                "pointSize": 6,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "decimals": 0,
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 0,
+            "y": 10
+          },
+          "id": 64,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "hidden",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi"
+            }
+          },
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "monero_info_alternative_blocks",
+              "interval": "",
+              "legendFormat": "alternative blocks",
+              "refId": "A"
+            }
+          ],
+          "title": "Alternative blocks",
           "transparent": true,
           "type": "timeseries"
         }
@@ -2036,6 +2129,92 @@
             }
           ],
           "title": "Time spent serving RPC methods",
+          "transparent": true,
+          "type": "timeseries"
+        },
+        {
+          "datasource": null,
+          "description": "Number of RPC connections being served.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "axisSoftMin": 0,
+                "barAlignment": -1,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "stepBefore",
+                "lineWidth": 1,
+                "pointSize": 6,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "decimals": 0,
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "short"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 0,
+            "y": 13
+          },
+          "id": 73,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "hidden",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi"
+            }
+          },
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "monero_info_rpc_connections",
+              "interval": "",
+              "legendFormat": "connections",
+              "refId": "A"
+            }
+          ],
+          "title": "RPC Connections",
           "transparent": true,
           "type": "timeseries"
         }
@@ -5017,20 +5196,20 @@
         "current": {
           "selected": true,
           "text": [
-            "1",
             "0.05",
             "0.25",
             "0.5",
             "0.75",
-            "0.95"
+            "0.95",
+            "1"
           ],
           "value": [
-            "1",
             "0.05",
             "0.25",
             "0.5",
             "0.75",
-            "0.95"
+            "0.95",
+            "1"
           ]
         },
         "datasource": null,
@@ -5073,5 +5252,5 @@
   "timezone": "",
   "title": "Monero",
   "uid": "K9dtfZG7z",
-  "version": 35
+  "version": 1
 }
