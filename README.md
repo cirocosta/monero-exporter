@@ -282,11 +282,6 @@ General information about this node.
 See [LICENSE](./LICENSE).
 
 
-## Thanks
-
-- maxmind geoip database: https://www.maxmind.com/en/geoip2-services-and-databases
-
-
 ## Donate
 
 ![donation qrcode]
