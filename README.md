@@ -303,11 +303,13 @@ General information about this node.
 | monero_info_alternative_blocks | number of blocks alternative to the longest |
 | monero_info_block_size_limit | maximum hard limit of a block |
 | monero_info_block_size_median | current median size for computing dynamic fees |
+| monero_info_height | current height of the chain |
 | monero_info_mainnet | whether the node is connected to mainnet |
 | monero_info_offline | whether the node is offline |
-| monero_info_synchronized | |
+| monero_info_rpc_connections | number of rpc connections being served by the node |
+| monero_info_synchronized | whether the node's chain is in sync with the network|
+| monero_info_target_height | target height to achieve to be considered in sync |
 | monero_info_uptime_seconds_total | for how long this node has been up |
-
 
 ## License
 

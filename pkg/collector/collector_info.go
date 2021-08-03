@@ -122,11 +122,41 @@ func (c *OverallCollector) collect() {
 	c.metricsC <- prometheus.MustNewConstMetric(
 		prometheus.NewDesc(
 			"monero_info_synchronized",
-			"",
+			"whether the node's chain is in sync with the network",
 			nil, nil,
 		),
 		prometheus.GaugeValue,
 		boolToFloat64(c.info.Synchronized),
+	)
+
+	c.metricsC <- prometheus.MustNewConstMetric(
+		prometheus.NewDesc(
+			"monero_info_height",
+			"current height of the chain",
+			nil, nil,
+		),
+		prometheus.GaugeValue,
+		float64(c.info.Height),
+	)
+
+	c.metricsC <- prometheus.MustNewConstMetric(
+		prometheus.NewDesc(
+			"monero_info_target_height",
+			"target height to achieve to be considered in sync",
+			nil, nil,
+		),
+		prometheus.GaugeValue,
+		float64(c.info.TargetHeight),
+	)
+
+	c.metricsC <- prometheus.MustNewConstMetric(
+		prometheus.NewDesc(
+			"monero_info_rpc_connections",
+			"number of rpc connections being served by the node",
+			nil, nil,
+		),
+		prometheus.GaugeValue,
+		float64(c.info.RPCConnectionsCount),
 	)
 }
 

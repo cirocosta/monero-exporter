@@ -5,7 +5,7 @@
 #
 # [1] - https://help.github.com/articles/organizing-information-with-tables/
 #
-# Usage: `curl -s localhost:9100/metrics  | grep container_ | ./gh-table-printer`
+# Usage: `curl -s localhost:9000/metrics  | grep monero_ | ./gh-table-printer`
 
 BEGIN {
   print "| name | description |"
