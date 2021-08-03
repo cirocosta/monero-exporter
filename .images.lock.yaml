@@ -3,14 +3,14 @@ kind: Config
 minimumRequiredVersion: 0.30.0
 overrides:
 - image: monero-exporter
-  newImage: index.docker.io/utxobr/monero-exporter@sha256:c5c019718c37c40cf4335405d47e7fe46b892e55ff74a712bd49e084c8bb02b1
+  newImage: index.docker.io/utxobr/monero-exporter@sha256:98f5d68a9c8a2cb92c0d981845d9ddc691c86e98318aa89e88a7d9646750a2c8
   preresolved: true
 - image: monero-exporter-grafana
-  newImage: index.docker.io/utxobr/monero-exporter-grafana@sha256:f9c47963d3fb573166881baf1a9f2ad331500e34b4604d430f96957ab7bb1449
+  newImage: index.docker.io/utxobr/monero-exporter-grafana@sha256:eb06f3451432e26ce17e78283ced2814952fdf715cae9916bc9584f283a92078
   preresolved: true
 - image: monero-exporter-monerod
-  newImage: index.docker.io/utxobr/monero-exporter-monerod@sha256:2cea588aaf937025daddc1dabaa3e90d74fd07f3a2a1b84adc79d7f0f3fc9057
+  newImage: index.docker.io/utxobr/monero-exporter-monerod@sha256:f5b6d355ab09b5372434dfacef21421407166c0b4e5c742ae8e57bfd194c53c0
   preresolved: true
 - image: monero-exporter-prometheus
-  newImage: index.docker.io/utxobr/monero-exporter-prometheus@sha256:f0a94da3052b0546a5a332401244d7cf63f80c74937511ac45f330c39503edac
+  newImage: index.docker.io/utxobr/monero-exporter-prometheus@sha256:ff7bad10b24e26dec5d51211071dd05efbd2bd92bcd10dbb1882ded3ce36af73
   preresolved: true
