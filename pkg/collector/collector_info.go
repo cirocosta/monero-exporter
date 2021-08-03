@@ -101,7 +101,7 @@ func (c *OverallCollector) collect() {
 
 	c.metricsC <- prometheus.MustNewConstMetric(
 		prometheus.NewDesc(
-			"monero_info_block_size_limit",
+			"monero_info_block_size_limit_bytes",
 			"maximum hard limit of a block",
 			nil, nil,
 		),
@@ -111,7 +111,7 @@ func (c *OverallCollector) collect() {
 
 	c.metricsC <- prometheus.MustNewConstMetric(
 		prometheus.NewDesc(
-			"monero_info_block_size_median",
+			"monero_info_block_size_median_bytes",
 			"current median size for computing dynamic fees",
 			nil, nil,
 		),
