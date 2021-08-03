@@ -301,8 +301,8 @@ General information about this node.
 | name | description |
 | ---- | ----------- |
 | monero_info_alternative_blocks | number of blocks alternative to the longest |
-| monero_info_block_size_limit | maximum hard limit of a block |
-| monero_info_block_size_median | current median size for computing dynamic fees |
+| monero_info_block_size_limit_bytes | maximum hard limit of a block |
+| monero_info_block_size_median_bytes | current median size for computing dynamic fees |
 | monero_info_height | current height of the chain |
 | monero_info_mainnet | whether the node is connected to mainnet |
 | monero_info_offline | whether the node is offline |
@@ -310,6 +310,8 @@ General information about this node.
 | monero_info_synchronized | whether the node's chain is in sync with the network|
 | monero_info_target_height | target height to achieve to be considered in sync |
 | monero_info_uptime_seconds_total | for how long this node has been up |
+| monero_info_database_size_bytes | size of the monero database |
+| monero_info_free_space_bytes | amount of free space in the partition where monero's database is in |
 
 ## License
 
