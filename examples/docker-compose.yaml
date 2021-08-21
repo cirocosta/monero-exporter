@@ -4,7 +4,7 @@ services:
     command:
     - -config=/etc/grafana/grafana.ini
     container_name: grafana
-    image: index.docker.io/utxobr/monero-exporter-grafana@sha256:eb06f3451432e26ce17e78283ced2814952fdf715cae9916bc9584f283a92078
+    image: index.docker.io/utxobr/monero-exporter-grafana@sha256:0e9f595487e7ee07f9059f75c302ce56fbe559074c0ba95a1d46a9a3c1c859a2
     ports:
     - 3000:3000
     volumes:
@@ -35,7 +35,7 @@ services:
     - --rpc-restricted-bind-ip=0.0.0.0
     - --rpc-restricted-bind-port=18089
     container_name: monerod
-    image: index.docker.io/utxobr/monero-exporter-monerod@sha256:f5b6d355ab09b5372434dfacef21421407166c0b4e5c742ae8e57bfd194c53c0
+    image: index.docker.io/utxobr/monero-exporter-monerod@sha256:19d889447ba4f703957d952ac753b330d5a2d7e324c98eac1f0f3d8bf2744817
     ports:
     - 18080:18080
     - 18089:18089
@@ -47,7 +47,7 @@ services:
     - --storage.tsdb.path=/data
     - --storage.tsdb.retention.time=30d
     container_name: prometheus
-    image: index.docker.io/utxobr/monero-exporter-prometheus@sha256:ff7bad10b24e26dec5d51211071dd05efbd2bd92bcd10dbb1882ded3ce36af73
+    image: index.docker.io/utxobr/monero-exporter-prometheus@sha256:21fcd719c6a3c8de35d513887e6666a5c49a15be742e328c034511cd60b5573e
     volumes:
     - prometheus-data:/data
     - ./prometheus/config.yaml:/etc/prometheus/config.yaml:ro
