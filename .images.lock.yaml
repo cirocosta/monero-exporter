@@ -3,7 +3,7 @@ kind: Config
 minimumRequiredVersion: 0.30.0
 overrides:
 - image: monero-exporter
-  newImage: index.docker.io/utxobr/monero-exporter@sha256:98f5d68a9c8a2cb92c0d981845d9ddc691c86e98318aa89e88a7d9646750a2c8
+  newImage: index.docker.io/utxobr/monero-exporter@sha256:737413b1054583535e835e1417b61a8d59a4c08723e4a15c61c4249c2a7d69a4
   preresolved: true
 - image: monero-exporter-grafana
   newImage: index.docker.io/utxobr/monero-exporter-grafana@sha256:eb06f3451432e26ce17e78283ced2814952fdf715cae9916bc9584f283a92078

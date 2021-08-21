@@ -25,12 +25,14 @@ services:
       - --check-updates=disabled
       - --data-dir=/data
       - --enforce-dns-checkpointing
+      - --in-peers=1024
       - --limit-rate=999999
       - --no-igd
       - --no-zmq
       - --out-peers=32
-      - --p2p-bind-ip=127.0.0.1
+      - --p2p-bind-ip=0.0.0.0
       - --p2p-bind-port=18080
+      - --public-node
       - --rpc-bind-ip=127.0.0.1
       - --rpc-bind-port=18081
       - --rpc-restricted-bind-ip=0.0.0.0

@@ -15,21 +15,21 @@ services:
     command:
     - --monero-addr=http://127.0.0.1:18081
     container_name: monero-exporter
-    image: index.docker.io/utxobr/monero-exporter@sha256:98f5d68a9c8a2cb92c0d981845d9ddc691c86e98318aa89e88a7d9646750a2c8
+    image: index.docker.io/utxobr/monero-exporter@sha256:737413b1054583535e835e1417b61a8d59a4c08723e4a15c61c4249c2a7d69a4
     network_mode: service:monerod
   monerod:
     command:
     - --check-updates=disabled
     - --data-dir=/data
     - --enforce-dns-checkpointing
+    - --in-peers=1024
     - --limit-rate=999999
     - --no-igd
     - --no-zmq
     - --out-peers=32
-    - --in-peers=1024
-    - --public-node
     - --p2p-bind-ip=0.0.0.0
     - --p2p-bind-port=18080
+    - --public-node
     - --rpc-bind-ip=127.0.0.1
     - --rpc-bind-port=18081
     - --rpc-restricted-bind-ip=0.0.0.0
