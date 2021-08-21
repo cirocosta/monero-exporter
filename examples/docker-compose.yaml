@@ -26,7 +26,9 @@ services:
     - --no-igd
     - --no-zmq
     - --out-peers=32
-    - --p2p-bind-ip=127.0.0.1
+    - --in-peers=1024
+    - --public-node
+    - --p2p-bind-ip=0.0.0.0
     - --p2p-bind-port=18080
     - --rpc-bind-ip=127.0.0.1
     - --rpc-bind-port=18081
