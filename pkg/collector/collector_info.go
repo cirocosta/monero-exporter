@@ -179,6 +179,17 @@ func (c *OverallCollector) collect() {
 		prometheus.GaugeValue,
 		float64(c.info.FreeSpace),
 	)
+
+	c.metricsC <- prometheus.MustNewConstMetric(
+		prometheus.NewDesc(
+			"monero_info_transactions_total",
+			"total number of transactions seen so far",
+			nil, nil,
+		),
+		prometheus.GaugeValue,
+		float64(c.info.TxCount),
+	)
+
 }
 
 func boolToFloat64(b bool) float64 {
