@@ -36,7 +36,7 @@ services:
       - --rpc-bind-ip=127.0.0.1
       - --rpc-bind-port=18081
       - --rpc-restricted-bind-ip=0.0.0.0
-      - --rpc-restricted-bind-port=18089
+      - --rpc-restricted-bind-pmort=18089
 
   monero-exporter:
     container_name: monero-exporter
@@ -54,7 +54,7 @@ services:
     command:
       - --config.file=/etc/prometheus/config.yaml
       - --storage.tsdb.path=/data
-      - --storage.tsdb.retention.time=30d
+      - --storage.tsdb.retention.time=90d
 
   grafana:
     container_name: grafana

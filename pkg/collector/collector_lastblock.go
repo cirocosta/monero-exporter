@@ -99,16 +99,24 @@ func (c *LastBlockStatsCollector) fetchData(ctx context.Context) error {
 }
 
 func (c *LastBlockStatsCollector) collectBlockSize() {
-	desc := prometheus.NewDesc(
-		"monero_lastblock_size_bytes",
-		"total size of the last block",
-		nil, nil,
+	c.metricsC <- prometheus.MustNewConstMetric(
+		prometheus.NewDesc(
+			"monero_lastblock_size_bytes",
+			"total size of the last block",
+			nil, nil,
+		),
+		prometheus.GaugeValue,
+		float64(c.header.BlockSize),
 	)
 
 	c.metricsC <- prometheus.MustNewConstMetric(
-		desc,
+		prometheus.NewDesc(
+			"monero_lastblock_weight_bytes",
+			"total weight of the last block",
+			nil, nil,
+		),
 		prometheus.GaugeValue,
-		float64(c.header.BlockSize),
+		float64(c.header.BlockWeight),
 	)
 }
 
@@ -230,6 +238,55 @@ func (c *LastBlockStatsCollector) collectTransactionsSize() {
 		prometheus.NewDesc(
 			"monero_lastblock_transactions_size_bytes",
 			"distribution of the size of the transactions included",
+			nil, nil,
+		),
+		summary.Count(), summary.Sum(), summary.Quantiles(),
+	)
+}
+
+// - transaction weight for a miner transaciton or a normal transaction with
+//   two outputs is equal to the size in bytes.
+// - a bulletproof occupies ((2*[log_2(64p)]+9)*32) bytes
+//
+//
+// ref: https://github.com/monero-project/monero/blob/a9cb4c082f1a815076674b543d93159a2137540e/src/cryptonote_basic/cryptonote_format_utils.cpp#L106
+//
+func (c *LastBlockStatsCollector) computeTransactionWeight(idx int) float64 {
+	const bpBase uint = 368
+
+	txn := c.txns[idx]
+	txnSize := uint(c.txnSizes[idx])
+
+	numberOfOutputs := uint(len(txn.Vout))
+	if numberOfOutputs <= 2 {
+		return float64(txnSize)
+	}
+
+	nlr := uint(0)
+	for {
+		if (1 << nlr) < numberOfOutputs {
+			break
+		}
+		nlr++
+	}
+	nlr += 6
+
+	bpSize := 32 * (9 + 2*nlr)
+	bpClawback := (bpBase*numberOfOutputs - bpSize) * 4 / 5
+
+	return float64(txnSize + bpClawback)
+}
+
+func (c *LastBlockStatsCollector) collectTransactionsWeight() {
+	summary := NewSummary()
+	for idx := range c.txnSizes {
+		summary.Insert(c.computeTransactionWeight(idx))
+	}
+
+	c.metricsC <- prometheus.MustNewConstSummary(
+		prometheus.NewDesc(
+			"monero_lastblock_transactions_weight_bytes",
+			"distribution of the weight of the transactions included",
 			nil, nil,
 		),
 		summary.Count(), summary.Sum(), summary.Quantiles(),

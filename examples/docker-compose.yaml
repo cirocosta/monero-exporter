@@ -22,11 +22,11 @@ services:
     - --check-updates=disabled
     - --data-dir=/data
     - --enforce-dns-checkpointing
-    - --in-peers=1024
+    - --in-peers=2048
     - --limit-rate=999999
     - --no-igd
     - --no-zmq
-    - --out-peers=32
+    - --out-peers=64
     - --p2p-bind-ip=0.0.0.0
     - --p2p-bind-port=18080
     - --public-node
@@ -35,7 +35,7 @@ services:
     - --rpc-restricted-bind-ip=0.0.0.0
     - --rpc-restricted-bind-port=18089
     container_name: monerod
-    image: index.docker.io/utxobr/monero-exporter-monerod@sha256:19d889447ba4f703957d952ac753b330d5a2d7e324c98eac1f0f3d8bf2744817
+    image: index.docker.io/utxobr/monero-exporter-monerod@sha256:15a70938c401a744b34d278fa345fb2e66fae8b428929ae52f1cea455e5bfcd9
     ports:
     - 18080:18080
     - 18089:18089
@@ -45,7 +45,7 @@ services:
     command:
     - --config.file=/etc/prometheus/config.yaml
     - --storage.tsdb.path=/data
-    - --storage.tsdb.retention.time=30d
+    - --storage.tsdb.retention.time=180d
     container_name: prometheus
     image: index.docker.io/utxobr/monero-exporter-prometheus@sha256:21fcd719c6a3c8de35d513887e6666a5c49a15be742e328c034511cd60b5573e
     volumes:
